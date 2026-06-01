@@ -13,18 +13,14 @@ public class SteamGameServerAPI{
     private static boolean isNativeAPILoaded = false;
 
     public static void loadLibraries() throws SteamException{
-        loadLibraries(null);
-    }
-
-    public static void loadLibraries(String libraryPath) throws SteamException{
 
         if(isNativeAPILoaded){
             return;
         }
 
-        SteamAPI.loadLibraries(libraryPath);
+        SteamAPI.loadLibraries();
 
-        SteamSharedLibraryLoader.loadLibrary("steamworks4j-server", libraryPath);
+        SteamSharedLibraryLoader.loadLibrary("steamworks4j-server");
 
         isNativeAPILoaded = true;
     }

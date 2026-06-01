@@ -12,9 +12,9 @@ public class SteamEncryptedAppTicket extends SteamInterface{
 
     public static void loadLibraries(String libraryPath) throws SteamException{
 
-        if(libraryPath == null && SteamSharedLibraryLoader.DEBUG){
-            String sdkPath = SteamSharedLibraryLoader.getSdkLibraryPath();
-            SteamSharedLibraryLoader.loadLibrary("sdkencryptedappticket", sdkPath);
+        if(libraryPath == null && false /* SteamSharedLibraryLoader.DEBUG */){
+//            String sdkPath = SteamSharedLibraryLoader.getSdkLibraryPath();
+//            SteamSharedLibraryLoader.loadLibrary("sdkencryptedappticket", sdkPath);
         }else{
             SteamSharedLibraryLoader.loadLibrary("sdkencryptedappticket", libraryPath);
         }
