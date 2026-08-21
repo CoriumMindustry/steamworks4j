@@ -16,43 +16,43 @@ final class SteamNetworkingSocketsNative{
 		return (intp) new SteamNetworkingSocketsCallback(env, javaCallback);
 	*/
 
-    public static native int connectP2P(long steamID, int virtualPort);/*
+    public static native int connectP2P(long pointer, long steamID, int virtualPort);/*
         SteamNetworkingIdentity identity;
         identity.m_eType = k_ESteamNetworkingIdentityType_SteamID;
         identity.SetSteamID64(steamID);
 
-        HSteamNetConnection connection = SteamNetworkingSockets()->ConnectP2P(identity, virtualPort, 0, NULL);
+        HSteamNetConnection connection = ((ISteamNetworkingSockets*) pointer)->ConnectP2P(identity, virtualPort, 0, NULL);
 
         return connection;
     */
 
-    public static native int createListenSocketP2P(int virtualPort);/*
-        HSteamListenSocket socket = SteamNetworkingSockets()->CreateListenSocketP2P(virtualPort, 0, NULL);
+    public static native int createListenSocketP2P(long pointer, int virtualPort);/*
+        HSteamListenSocket socket = ((ISteamNetworkingSockets*) pointer)->CreateListenSocketP2P(virtualPort, 0, NULL);
 
         return socket;
     */
 
-    public static native int acceptConnection(int netConnectionHandle);/*
-        return SteamNetworkingSockets()->AcceptConnection(netConnectionHandle);
+    public static native int acceptConnection(long pointer, int netConnectionHandle);/*
+        return ((ISteamNetworkingSockets*) pointer)->AcceptConnection(netConnectionHandle);
     */
 
-    public static native boolean closeConnection(int netConnectionHandle, int reason, boolean linger);/*
-        return SteamNetworkingSockets()->CloseConnection(netConnectionHandle, reason, NULL, linger);
+    public static native boolean closeConnection(long pointer, int netConnectionHandle, int reason, boolean linger);/*
+        return ((ISteamNetworkingSockets*) pointer)->CloseConnection(netConnectionHandle, reason, NULL, linger);
     */
 
-    public static native boolean closeListenSocket(int socketHandle);/*
-        return SteamNetworkingSockets()->CloseListenSocket(socketHandle);
+    public static native boolean closeListenSocket(long pointer, int socketHandle);/*
+        return ((ISteamNetworkingSockets*) pointer)->CloseListenSocket(socketHandle);
     */
 
-    public static native int sendMessageToConnection(int netConnectionHandle, ByteBuffer data, int offset, int size, int sendFlags);/*
-        return SteamNetworkingSockets()->SendMessageToConnection(netConnectionHandle, &data[offset], size, sendFlags, NULL);
+    public static native int sendMessageToConnection(long pointer, int netConnectionHandle, ByteBuffer data, int offset, int size, int sendFlags);/*
+        return ((ISteamNetworkingSockets*) pointer)->SendMessageToConnection(netConnectionHandle, &data[offset], size, sendFlags, NULL);
     */
 
-    public static native int receiveMessageOnConnection(int netConnectionHandle, ByteBuffer data, int offset, int size);/*
+    public static native int receiveMessageOnConnection(long pointer, int netConnectionHandle, ByteBuffer data, int offset, int size);/*
 
         SteamNetworkingMessage_t* messages[1];
 
-        int messagesReceived = SteamNetworkingSockets()->ReceiveMessagesOnConnection((HSteamNetConnection)netConnectionHandle, messages, 1);
+        int messagesReceived = ((ISteamNetworkingSockets*) pointer)->ReceiveMessagesOnConnection((HSteamNetConnection)netConnectionHandle, messages, 1);
         if (messagesReceived <= 0 || !messages[0]) {
             return 0;
         }
@@ -72,8 +72,8 @@ final class SteamNetworkingSocketsNative{
         return bytesWritten;
     */
 
-    public static native int flushMessages(int connectionHandle);/*
-        return SteamNetworkingSockets()->FlushMessagesOnConnection(connectionHandle);
+    public static native int flushMessages(long pointer, int connectionHandle);/*
+        return ((ISteamNetworkingSockets*) pointer)->FlushMessagesOnConnection(connectionHandle);
     */
 
     public static native boolean setConnectionConfigValueInt32(int netConnectionHandle, int configValue, int value);/*
@@ -114,9 +114,9 @@ final class SteamNetworkingSocketsNative{
     //  44  int32  cbSentUnackedReliable
     //  48  int32  (reserved/padding, currently unused)
     // Returns the EResult from the native call; buffer is only written on k_EResultOK.
-    public static native int getConnectionRealTimeStatus(int netConnectionHandle, ByteBuffer data, int offset); /*
+    public static native int getConnectionRealTimeStatus(long pointer, int netConnectionHandle, ByteBuffer data, int offset); /*
         SteamNetConnectionRealTimeStatus_t status;
-        EResult result = SteamNetworkingSockets()->GetConnectionRealTimeStatus(
+        EResult result = ((ISteamNetworkingSockets*) pointer)->GetConnectionRealTimeStatus(
             (HSteamNetConnection) netConnectionHandle, &status, 0, NULL);
 
         if(result == k_EResultOK){

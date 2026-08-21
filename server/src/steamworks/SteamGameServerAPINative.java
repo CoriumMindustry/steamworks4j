@@ -43,6 +43,10 @@ class SteamGameServerAPINative{
 		return (intp) SteamGameServerNetworking();
 	*/
 
+    static native long getSteamGameServerNetworkingSocketsPointer(); /*
+		return (intp) SteamGameServerNetworkingSockets();
+	*/
+
     static native long getSteamGameServerStatsPointer(); /*
 		return (intp) SteamGameServerStats();
 	*/

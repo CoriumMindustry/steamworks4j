@@ -135,6 +135,10 @@ public class SteamAPI{
 		return (intp) SteamNetworking();
 	*/
 
+    static native long getSteamNetworkingSocketsPointer(); /*
+		return (intp) SteamNetworkingSockets();
+	*/
+
     static native long getSteamRemoteStoragePointer(); /*
 		return (intp) SteamRemoteStorage();
 	*/

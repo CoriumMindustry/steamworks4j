@@ -293,16 +293,21 @@ public class SteamNetworkingSockets extends SteamInterface{
     }
 
     public SteamNetworkingSockets(SteamNetworkingSocketsCallback callback){
-        super(SteamNetworkingSocketsNative.createCallback(new SteamNetworkingSocketsCallbackAdapter(callback)));
+        this(SteamAPI.getSteamNetworkingSocketsPointer(),
+        SteamNetworkingSocketsNative.createCallback(new SteamNetworkingSocketsCallbackAdapter(callback)));
+    }
+
+    SteamNetworkingSockets(long pointer, long callback){
+        super(pointer, callback);
     }
 
     public Connection connectP2P(SteamID steamID, int virtualPort){
-        int result = SteamNetworkingSocketsNative.connectP2P(steamID.handle, virtualPort);
+        int result = SteamNetworkingSocketsNative.connectP2P(pointer, steamID.handle, virtualPort);
         return new Connection(result);
     }
 
     public Socket createListenSocketP2P(int virtualPort){
-        int result = SteamNetworkingSocketsNative.createListenSocketP2P(virtualPort);
+        int result = SteamNetworkingSocketsNative.createListenSocketP2P(pointer, virtualPort);
         return new Socket(result);
     }
 
@@ -318,16 +323,16 @@ public class SteamNetworkingSockets extends SteamInterface{
      * This method communicates with the native SteamNetworkingSockets API to accept a connection.
      */
     public SteamResult acceptConnection(Connection connection){
-        int result = SteamNetworkingSocketsNative.acceptConnection(connection.handle);
+        int result = SteamNetworkingSocketsNative.acceptConnection(pointer, connection.handle);
         return SteamResult.byValue(result);
     }
 
     public boolean closeConnection(Connection connection, int reason, boolean linger){
-        return SteamNetworkingSocketsNative.closeConnection(connection.handle, reason, linger);
+        return SteamNetworkingSocketsNative.closeConnection(pointer, connection.handle, reason, linger);
     }
 
     public boolean closeListenSocket(Socket socket){
-        return SteamNetworkingSocketsNative.closeListenSocket(socket.handle);
+        return SteamNetworkingSocketsNative.closeListenSocket(pointer, socket.handle);
     }
 
     /**
@@ -350,7 +355,7 @@ public class SteamNetworkingSockets extends SteamInterface{
             throw new SteamException("Direct buffer required!");
         }
 
-        int result = SteamNetworkingSocketsNative.sendMessageToConnection(connection.handle, data, data.position(), data.remaining(), sendFlags);
+        int result = SteamNetworkingSocketsNative.sendMessageToConnection(pointer, connection.handle, data, data.position(), data.remaining(), sendFlags);
         return SteamResult.byValue(result);
     }
 
@@ -368,7 +373,7 @@ public class SteamNetworkingSockets extends SteamInterface{
      * This method communicates with the native SteamNetworkingSockets API to perform the operation.
      */
     public SteamResult flushMessages(Connection connection){
-        int result = SteamNetworkingSocketsNative.flushMessages(connection.handle);
+        int result = SteamNetworkingSocketsNative.flushMessages(pointer, connection.handle);
         return SteamResult.byValue(result);
     }
 
@@ -407,7 +412,7 @@ public class SteamNetworkingSockets extends SteamInterface{
             throw new SteamException("Direct buffer required!");
         }
 
-        int bytesWritten = SteamNetworkingSocketsNative.receiveMessageOnConnection(connection.handle, data, data.position(), data.remaining());
+        int bytesWritten = SteamNetworkingSocketsNative.receiveMessageOnConnection(pointer, connection.handle, data, data.position(), data.remaining());
         if(bytesWritten < 0){
             throw new SteamException("Buffer Overflow, bytes received: " + (-bytesWritten) + " bytes remaining: " + data.remaining());
         }
@@ -486,7 +491,7 @@ public class SteamNetworkingSockets extends SteamInterface{
     public RealTimeStatus getConnectionRealTimeStatus(Connection connection){
         synchronized(statusBuffer){
             statusBuffer.clear();
-            int result = SteamNetworkingSocketsNative.getConnectionRealTimeStatus(connection.handle, statusBuffer, 0);
+            int result = SteamNetworkingSocketsNative.getConnectionRealTimeStatus(pointer, connection.handle, statusBuffer, 0);
             if(SteamResult.byValue(result) != SteamResult.OK) return null;
 
             statusBuffer.position(0);
